@@ -69,6 +69,8 @@ export function buildWaterways(
 
   // 双方向判定用セット
   const pairKeys = new Set(pairMap.keys());
+  // 双方向ペアの重複除去用（A→BとB→Aの両方がある場合、1本だけ描画）
+  const processed = new Set<string>();
 
   // Waterway[] 生成
   const waterways: Waterway[] = [];
@@ -76,20 +78,29 @@ export function buildWaterways(
   for (const [key, pair] of pairMap) {
     if (pair.totalVolume < MIN_FLOW_VOLUME) continue;
 
+    const reverseKey = `${pair.toId}->${pair.fromId}`;
+    const bidirectional = pairKeys.has(reverseKey);
+
+    // 双方向の場合、逆方向が既に処理済みならスキップ
+    if (bidirectional && processed.has(reverseKey)) continue;
+    processed.add(key);
+
     const fromPos = idToPosition.get(pair.fromId);
     const toPos = idToPosition.get(pair.toId);
     if (!fromPos || !toPos) continue;
 
-    const reverseKey = `${pair.toId}->${pair.fromId}`;
-    const bidirectional = pairKeys.has(reverseKey);
+    // 双方向なら両方の流量を合算
+    const reversePair = bidirectional ? pairMap.get(reverseKey) : null;
+    const totalFlow = pair.totalVolume + (reversePair?.totalVolume ?? 0);
+    const totalRecent = pair.recentVolume + (reversePair?.recentVolume ?? 0);
 
     waterways.push({
       fromStudentId: pair.fromId,
       toStudentId: pair.toId,
       fromPosition: fromPos,
       toPosition: toPos,
-      flowVolume: pair.totalVolume,
-      recentFlow: pair.recentVolume,
+      flowVolume: totalFlow,
+      recentFlow: totalRecent,
       bidirectional,
     });
   }

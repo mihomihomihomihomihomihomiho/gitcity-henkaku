@@ -79,79 +79,59 @@ export default function CityCanvas({
       );
     }
 
-    // 水路（L字型ルーティング）
+    // 水路（細いL字線 — 色で流量を表現: 赤=多い、緑=普通、黒=少ない）
+    const t = 0.08; // 固定の細さ
+    const h = 0.02;
     for (let wi = 0; wi < waterways.length; wi++) {
       const ww = waterways[wi];
       const fx = ww.fromPosition.x + offsetX;
       const fy = ww.fromPosition.y + offsetY;
       const tx = ww.toPosition.x + offsetX;
       const ty = ww.toPosition.y + offsetY;
-      const thickness = 0.15 + Math.min(0.35, ww.flowVolume / 25);
-      const intensity = Math.min(1, ww.flowVolume / 15);
-      const wColor = new Color(
-        Math.floor(40 + intensity * 30),
-        Math.floor(140 + intensity * 60),
-        Math.floor(180 + intensity * 40)
-      );
-      const h = 0.03;
+
+      // 流量で色を決定: 少ない=暗い, 普通=緑, 多い=赤
+      const maxFlow = 20;
+      const ratio = Math.min(1, ww.flowVolume / maxFlow);
+      let cr: number, cg: number, cb: number;
+      if (ratio < 0.4) {
+        // 黒〜暗緑
+        cr = Math.floor(20 + ratio * 50);
+        cg = Math.floor(20 + ratio * 100);
+        cb = Math.floor(20 + ratio * 30);
+      } else if (ratio < 0.7) {
+        // 緑
+        const t2 = (ratio - 0.4) / 0.3;
+        cr = Math.floor(40 + t2 * 80);
+        cg = Math.floor(160 - t2 * 40);
+        cb = Math.floor(32 + t2 * 10);
+      } else {
+        // 赤
+        const t2 = (ratio - 0.7) / 0.3;
+        cr = Math.floor(120 + t2 * 135);
+        cg = Math.floor(120 - t2 * 90);
+        cb = Math.floor(42 - t2 * 20);
+      }
+      const wColor = new Color(cr, cg, cb);
 
       const dxSeg = tx - fx;
       const dySeg = ty - fy;
 
       if (wi % 2 === 0) {
-        // X方向 → Y方向
         if (Math.abs(dxSeg) > 0.01) {
-          const xStart = Math.min(fx, tx);
-          const xLen = Math.abs(dxSeg);
-          iso.add(
-            Shape.Prism(new Point(xStart, fy - thickness / 2, 0), xLen, thickness, h),
-            wColor
-          );
+          iso.add(Shape.Prism(new Point(Math.min(fx, tx), fy - t / 2, 0), Math.abs(dxSeg), t, h), wColor);
         }
         if (Math.abs(dySeg) > 0.01) {
-          const yStart = Math.min(fy, ty);
-          const yLen = Math.abs(dySeg);
-          iso.add(
-            Shape.Prism(new Point(tx - thickness / 2, yStart, 0), thickness, yLen, h),
-            wColor
-          );
+          iso.add(Shape.Prism(new Point(tx - t / 2, Math.min(fy, ty), 0), t, Math.abs(dySeg), h), wColor);
         }
-        iso.add(
-          Shape.Prism(
-            new Point(tx - thickness / 2, fy - thickness / 2, 0),
-            thickness,
-            thickness,
-            h
-          ),
-          wColor
-        );
+        iso.add(Shape.Prism(new Point(tx - t / 2, fy - t / 2, 0), t, t, h), wColor);
       } else {
-        // Y方向 → X方向
         if (Math.abs(dySeg) > 0.01) {
-          const yStart = Math.min(fy, ty);
-          const yLen = Math.abs(dySeg);
-          iso.add(
-            Shape.Prism(new Point(fx - thickness / 2, yStart, 0), thickness, yLen, h),
-            wColor
-          );
+          iso.add(Shape.Prism(new Point(fx - t / 2, Math.min(fy, ty), 0), t, Math.abs(dySeg), h), wColor);
         }
         if (Math.abs(dxSeg) > 0.01) {
-          const xStart = Math.min(fx, tx);
-          const xLen = Math.abs(dxSeg);
-          iso.add(
-            Shape.Prism(new Point(xStart, ty - thickness / 2, 0), xLen, thickness, h),
-            wColor
-          );
+          iso.add(Shape.Prism(new Point(Math.min(fx, tx), ty - t / 2, 0), Math.abs(dxSeg), t, h), wColor);
         }
-        iso.add(
-          Shape.Prism(
-            new Point(fx - thickness / 2, ty - thickness / 2, 0),
-            thickness,
-            thickness,
-            h
-          ),
-          wColor
-        );
+        iso.add(Shape.Prism(new Point(fx - t / 2, ty - t / 2, 0), t, t, h), wColor);
       }
     }
 
