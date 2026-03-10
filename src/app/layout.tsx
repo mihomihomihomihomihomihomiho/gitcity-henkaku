@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
+
+const Providers = dynamic(() => import("./providers"), { ssr: false });
 
 export const metadata: Metadata = {
   title: "GitCity Henkaku",
@@ -12,7 +15,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body style={{ margin: 0 }}>{children}</body>
+      <body style={{ margin: 0 }}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { useAccount } from "wagmi";
 import CityCanvas from "@/components/city/CityCanvas";
 import CityTooltip from "@/components/city/CityTooltip";
 import Leaderboard from "@/components/dashboard/Leaderboard";
 import Header from "@/components/shared/Header";
-import type { CityBuilding, CityData } from "@/types";
+import type { CityBuilding, CityData, StudentData } from "@/types";
 
 export default function Home() {
   const [cityData, setCityData] = useState<CityData | null>(null);
@@ -13,6 +14,24 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [hoveredBuilding, setHoveredBuilding] = useState<CityBuilding | null>(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
+  const [myStudentId, setMyStudentId] = useState<string | null>(null);
+  const { address } = useAccount();
+
+  // ログインユーザーのビルをハイライト
+  useEffect(() => {
+    if (!address) {
+      setMyStudentId(null);
+      return;
+    }
+    fetch("/api/students")
+      .then((res) => res.json())
+      .then(() => {
+        // wallet→studentIdの紐付けは認証済みAPI経由で行う
+        // 暫定: cityDataからaddressベースで検索
+        // TODO: 認証済みAPIが返すstudentIdを使用
+      })
+      .catch(() => {});
+  }, [address]);
 
   useEffect(() => {
     fetch("/api/city")
@@ -72,6 +91,7 @@ export default function Home() {
               <CityCanvas
                 buildings={cityData.buildings}
                 waterways={cityData.waterways}
+                highlightStudentId={myStudentId}
                 onHoverBuilding={handleHover}
               />
               <CityTooltip

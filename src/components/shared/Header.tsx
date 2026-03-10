@@ -1,5 +1,7 @@
 "use client";
 
+import ConnectWallet from "./ConnectWallet";
+
 export default function Header() {
   return (
     <header
@@ -20,8 +22,7 @@ export default function Header() {
           web3/AI概論 リーダーボード
         </p>
       </div>
-      {/* ConnectWalletはChunk 5で追加 */}
-      <div id="wallet-connect-slot" />
+      <ConnectWallet />
     </header>
   );
 }
