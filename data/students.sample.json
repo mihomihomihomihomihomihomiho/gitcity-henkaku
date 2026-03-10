@@ -1,0 +1,72 @@
+[
+  {
+    "id": "student-001",
+    "name": "山田太郎",
+    "githubUsername": "yamada-taro",
+    "walletAddress": "0x1111111111111111111111111111111111111111",
+    "projectRepo": "https://github.com/yamada-taro/web3-project"
+  },
+  {
+    "id": "student-002",
+    "name": "佐藤花子",
+    "githubUsername": "sato-hanako",
+    "walletAddress": "0x2222222222222222222222222222222222222222",
+    "projectRepo": "https://github.com/sato-hanako/ai-dapp"
+  },
+  {
+    "id": "student-003",
+    "name": "鈴木一郎",
+    "githubUsername": "suzuki-ichiro",
+    "walletAddress": "0x3333333333333333333333333333333333333333",
+    "projectRepo": "https://github.com/suzuki-ichiro/defi-tool"
+  },
+  {
+    "id": "student-004",
+    "name": "高橋美咲",
+    "githubUsername": "takahashi-misaki",
+    "walletAddress": "0x4444444444444444444444444444444444444444",
+    "projectRepo": "https://github.com/takahashi-misaki/nft-gallery"
+  },
+  {
+    "id": "student-005",
+    "name": "田中健太",
+    "githubUsername": "tanaka-kenta",
+    "walletAddress": "0x5555555555555555555555555555555555555555",
+    "projectRepo": "https://github.com/tanaka-kenta/dao-voting"
+  },
+  {
+    "id": "student-006",
+    "name": "伊藤さくら",
+    "githubUsername": "ito-sakura",
+    "walletAddress": "0x6666666666666666666666666666666666666666",
+    "projectRepo": "https://github.com/ito-sakura/token-swap"
+  },
+  {
+    "id": "student-007",
+    "name": "渡辺大輝",
+    "githubUsername": "watanabe-daiki",
+    "walletAddress": "0x7777777777777777777777777777777777777777",
+    "projectRepo": "https://github.com/watanabe-daiki/web3-game"
+  },
+  {
+    "id": "student-008",
+    "name": "中村優子",
+    "githubUsername": "nakamura-yuko",
+    "walletAddress": "0x8888888888888888888888888888888888888888",
+    "projectRepo": "https://github.com/nakamura-yuko/ai-agent"
+  },
+  {
+    "id": "student-009",
+    "name": "小林翔太",
+    "githubUsername": "kobayashi-shota",
+    "walletAddress": "0x9999999999999999999999999999999999999999",
+    "projectRepo": "https://github.com/kobayashi-shota/supply-chain"
+  },
+  {
+    "id": "student-010",
+    "name": "加藤りな",
+    "githubUsername": "kato-rina",
+    "walletAddress": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "projectRepo": "https://github.com/kato-rina/social-fi"
+  }
+]
